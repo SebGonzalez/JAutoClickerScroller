@@ -1,0 +1,55 @@
+plugins {
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+    id 'org.beryx.runtime' version '1.12.3'
+}
+
+group 'com.gonzalez'
+
+repositories {
+    mavenCentral()
+}
+
+javafx {
+    version = 17
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.media', 'javafx.fxml', 'javafx.web', 'javafx.swing']
+}
+
+jar {
+    enabled = true
+}
+
+dependencies {
+    //implementation files('libs/scenicview.jar')
+    implementation group: 'org.kordamp.ikonli', name: 'ikonli-javafx', version: '12.2.0'
+    implementation group: 'org.kordamp.ikonli', name: 'ikonli-fontawesome5-pack', version: '12.2.0'
+    implementation group: 'io.github.palexdev', name: 'materialfx', version: '11.12.0'
+
+}
+
+mainClassName = "com.gonzalez.Launcher"
+
+runtime {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+
+    targetPlatform("win", "$rootDir/jdk/jdk-17")
+
+    jpackage {
+        skipInstaller = true
+        targetPlatformName = "win"
+        jpackageHome = "$rootDir/jdk/jdk-17"
+        def imgType = targetPlatformName == "win" ? 'ico' : targetPlatformName == "mac" ? 'icns' : 'png'
+        imageOptions  = ['--icon', "$rootDir\\ico.ico"]
+        installerOptions += ['--resource-dir', "src/main/resources"]
+
+        if(targetPlatformName == "win") {
+            installerOptions += [/*'--win-per-user-install',*/ '--win-dir-chooser', '--win-menu', '--win-shortcut']
+        }
+        else if (targetPlatformName == "lin") {
+            installerOptions += ['--linux-package-name', 'hellofx','--linux-shortcut']
+        }
+        else if (targetPlatformName == "mac") {
+            installerOptions += ['--mac-package-name', 'hellofx']
+        }
+    }
+}

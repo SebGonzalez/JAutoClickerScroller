@@ -1,0 +1,26 @@
+@font-face {
+    font-family: 'Regular';
+    src: url('../font/CongratsScript.ttf');
+}
+
+@font-face {
+    font-family: 'Regular';
+    src: url('../font/SFBalloons.ttf');
+}
+
+@font-face {
+    font-family: 'Regular';
+    src: url('../font/KRBirthdayLetters.ttf');
+}
+
+.mainMenu {
+ -fx-background-color: rgba(88,88,88,0.2);
+ -fx-border-radius: 20px;
+}
+
+.button {
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}

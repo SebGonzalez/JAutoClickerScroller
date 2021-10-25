@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+
+<?import javafx.scene.control.Button?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" styleClass="mainMenu"
+      fx:controller="com.gonzalez.Launcher">
+    <Button mnemonicParsing="false"
+            prefWidth="40.0"
+            fx:id="play">
+        <graphic>
+            <FontIcon iconLiteral="fas-play" iconSize="32" iconColor="blue"/>
+        </graphic>
+    </Button>
+
+    <VBox fx:id="vboxHidableButton">
+        <Button mnemonicParsing="false"
+                prefWidth="40.0"
+                fx:id="plus">
+            <graphic>
+                <FontIcon iconLiteral="fas-plus" iconSize="32" iconColor="green"/>
+            </graphic>
+        </Button>
+
+        <Button mnemonicParsing="false"
+                prefWidth="40.0"
+                fx:id="minus">
+            <graphic>
+                <FontIcon iconLiteral="fas-minus" iconSize="32" iconColor="red"/>
+            </graphic>
+        </Button>
+
+        <Button mnemonicParsing="false"
+                prefWidth="40.0"
+                fx:id="settings">
+            <graphic>
+                <FontIcon iconLiteral="fas-cog" iconSize="32" iconColor="gray"/>
+            </graphic>
+        </Button>
+    </VBox>
+
+    <Button mnemonicParsing="false"
+            prefWidth="40.0"
+            fx:id="expand">
+        <graphic>
+            <FontIcon iconLiteral="fas-arrows-alt" iconSize="32" iconColor="gray"/>
+        </graphic>
+    </Button>
+</VBox>
