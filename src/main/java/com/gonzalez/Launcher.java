@@ -7,14 +7,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.kordamp.ikonli.Ikon;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.awt.*;
@@ -94,12 +91,11 @@ public class Launcher extends Application {
     }
 
     private void onPlayPressed() {
-        System.out.println("yeah : " + listTarget.size());
         startAutoCliker = true;
         ((FontIcon) play.getGraphic()).setIconLiteral("fas-pause");
 
         for(Target target: listTarget) {
-            target.hide();
+            target.setVisible(false);
         }
 
         Thread t = new Thread(() -> {
@@ -113,15 +109,14 @@ public class Launcher extends Application {
                 for(Target target : listTarget) {
                     if(!startAutoCliker) break;
 
-                    System.out.println("click");
-                    System.out.println(target.getX() + " " + target.getY());
-                    robot.mouseMove((int)target.getX() + 16, (int)target.getY() + 16);
+                    robot.mouseMove((int)target.getX() + 24, (int)target.getY() + 24);
                     sleep(100);
                     robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                     sleep(100);
                     robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
-                    sleep(2000);
+                    target.playAnimationClick();
+                    sleep(target.getTimeToWait());
                 }
             }
         });
@@ -134,7 +129,7 @@ public class Launcher extends Application {
         ((FontIcon) play.getGraphic()).setIconLiteral("fas-play");
 
         for(Target target: listTarget) {
-            target.show();
+            target.setVisible(true);
         }
     }
 
