@@ -1,12 +1,14 @@
 package com.gonzalez;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
@@ -35,7 +37,7 @@ public class Launcher extends Application {
     @FXML private Button settings;
     @FXML private Button expand;
 
-    static List<Target> listTarget = new ArrayList<>();
+    List<Target> listTarget = new ArrayList<>();
     private boolean startAutoCliker = false;
 
     public static void main(String[] args) {
@@ -44,6 +46,7 @@ public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) {
+        Launcher.stage = stage;
         FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("views/home.fxml"));
 
         Parent root = null;
@@ -53,21 +56,26 @@ public class Launcher extends Application {
             e.printStackTrace();
         }
 
-        Launcher.stage = stage;
         scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
+
         //scene.setFill(new Color(0.22,0.22,0.22,0.5));
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
-        addTarget();
+
+
+        ((Launcher)loader.getController()).addTarget();
+        ((Launcher)loader.getController()).addListener();
     }
 
     @FXML
     public void initialize() {
         setDraggable(expand);
+    }
 
+    private void addListener() {
         play.setOnMousePressed(event -> {
             if (!startAutoCliker) {
                 onPlayPressed();
@@ -86,6 +94,12 @@ public class Launcher extends Application {
             removeTarget();
             if(listTarget.size() == 0) {
                 minus.setDisable(true);
+            }
+        });
+
+        scene.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.S) {
+                onLeftPressed();
             }
         });
     }
@@ -116,12 +130,12 @@ public class Launcher extends Application {
                     robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
 
                     target.playAnimationClick();
+                    Platform.runLater(() ->  scene.getWindow().requestFocus());
                     sleep(target.getTimeToWait());
                 }
             }
         });
         t.start();
-
     }
 
     private void onLeftPressed() {
