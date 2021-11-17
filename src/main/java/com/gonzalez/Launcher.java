@@ -1,5 +1,7 @@
 package com.gonzalez;
 
+import io.github.palexdev.materialfx.controls.MFXDialog;
+import io.github.palexdev.materialfx.controls.MFXStageDialog;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -12,6 +14,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -19,10 +22,13 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Launcher extends Application {
+
+    private Settings globalSettings = new Settings();
 
     private static Scene scene;
     private static Stage stage;
@@ -66,8 +72,8 @@ public class Launcher extends Application {
         stage.show();
 
 
-        ((Launcher)loader.getController()).addTarget();
-        ((Launcher)loader.getController()).addListener();
+        ((Launcher) loader.getController()).addTarget();
+        ((Launcher) loader.getController()).addListener();
     }
 
     @FXML
@@ -86,29 +92,55 @@ public class Launcher extends Application {
 
         plus.setOnMousePressed(event -> {
             addTarget();
-            if(listTarget.size() == 1) {
+            if (listTarget.size() == 1) {
                 minus.setDisable(false);
             }
         });
         minus.setOnMousePressed(event -> {
             removeTarget();
-            if(listTarget.size() == 0) {
+            if (listTarget.size() == 0) {
                 minus.setDisable(true);
             }
         });
 
         scene.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.S) {
+            if (event.getCode() == KeyCode.S) {
                 onLeftPressed();
             }
         });
+
+        settings.setOnMousePressed(event -> onSettingPressed());
+    }
+
+    private void onSettingPressed() {
+        MFXDialog infoDialog;
+        MFXStageDialog stageDialog;
+
+        GlobalConfig globalConfig = new GlobalConfig(globalSettings);
+        try {
+            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("views/SettingDialog.fxml"));
+            loader.setControllerFactory(controller -> globalConfig);
+            infoDialog = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        stageDialog = new MFXStageDialog(infoDialog);
+        stageDialog.setScrimBackground(true);
+        stageDialog.setOwner(stage);
+        stageDialog.setModality(Modality.APPLICATION_MODAL);
+        stageDialog.setCenterInOwner(true);
+        stageDialog.show();
+
+        globalConfig.setMfxStageDialog(stageDialog);
     }
 
     private void onPlayPressed() {
         startAutoCliker = true;
         ((FontIcon) play.getGraphic()).setIconLiteral("fas-pause");
 
-        for(Target target: listTarget) {
+        for (Target target : listTarget) {
             target.setVisible(false);
         }
 
@@ -119,30 +151,69 @@ public class Launcher extends Application {
             } catch (AWTException e) {
                 e.printStackTrace();
             }
-            while(true) {
-                for(Target target : listTarget) {
-                    if(!startAutoCliker) break;
 
-                    robot.mouseMove((int)target.getX() + 24, (int)target.getY() + 24);
-                    sleep(100);
-                    robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-                    sleep(100);
-                    robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-
-                    target.playAnimationClick();
-                    Platform.runLater(() ->  scene.getWindow().requestFocus());
-                    sleep(target.getTimeToWait());
-                }
+            switch (globalSettings.getAutoClickerType()) {
+                case INFINITE -> startInfiniteAutoClicker(robot);
+                case TIME -> startTimeAutoClicker(robot);
+                case CYCLE -> startCycleAutoClicker(robot);
             }
+
         });
         t.start();
+    }
+
+    private void startInfiniteAutoClicker(Robot robot) {
+        while (startAutoCliker) {
+            executeAutoClickerOnAllTargetOnce(robot);
+        }
+        System.out.println("fini");
+    }
+
+    private void startTimeAutoClicker(Robot robot) {
+        LocalTime stopLocalTime = LocalTime.now().plusHours(globalSettings.getTime().getHour()).plusMinutes(globalSettings.getTime().getMinute());
+
+        while (startAutoCliker && LocalTime.now().isBefore(stopLocalTime)) {
+            executeAutoClickerOnAllTargetOnce(robot);
+        }
+
+        if(startAutoCliker) {
+            onLeftPressed();
+        }
+    }
+
+    private void startCycleAutoClicker(Robot robot) {
+        int nbCycle = 0;
+        while (startAutoCliker && nbCycle <= globalSettings.getNbCycle()) {
+            executeAutoClickerOnAllTargetOnce(robot);
+            nbCycle++;
+        }
+
+        if(startAutoCliker) {
+            onLeftPressed();
+        }
+    }
+
+    private void executeAutoClickerOnAllTargetOnce(Robot robot) {
+        for (Target target : listTarget) {
+            if (!startAutoCliker) break;
+
+            robot.mouseMove((int) target.getX() + 24, (int) target.getY() + 24);
+            sleep(100);
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            sleep(100);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+            target.playAnimationClick();
+            Platform.runLater(() -> scene.getWindow().requestFocus());
+            sleep(target.getTimeToWait());
+        }
     }
 
     private void onLeftPressed() {
         startAutoCliker = false;
         ((FontIcon) play.getGraphic()).setIconLiteral("fas-play");
 
-        for(Target target: listTarget) {
+        for (Target target : listTarget) {
             target.setVisible(true);
         }
     }
@@ -185,13 +256,13 @@ public class Launcher extends Application {
     }
 
     private void addTarget() {
-        Target target = new Target(stage, listTarget.size()+1);
+        Target target = new Target(stage, listTarget.size() + 1);
         listTarget.add(target);
     }
 
     private void removeTarget() {
-        listTarget.get(listTarget.size()-1).close();
-        listTarget.remove(listTarget.size()-1);
+        listTarget.get(listTarget.size() - 1).close();
+        listTarget.remove(listTarget.size() - 1);
     }
 
     private void sleep(int millis) {

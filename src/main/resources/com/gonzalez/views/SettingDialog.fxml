@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import io.github.palexdev.materialfx.controls.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import jfxtras.scene.control.LocalTimeTextField?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+<MFXDialog fx:id="dialog" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+           prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.gonzalez.GlobalConfig">
+    <top>
+        <VBox id="headerNode" prefHeight="80.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <HBox>
+                <Label fx:id="configName" alignment="CENTER" maxHeight="1.7976931348623157E308"
+                       maxWidth="1.7976931348623157E308" text="" textAlignment="CENTER"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button>
+                    <graphic>
+                        <FontIcon fx:id="renameConfig" iconLiteral="fas-pencil-alt" iconSize="32"
+                                  iconColor="gray"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <HBox spacing="10">
+            <MFXButton fx:id="configLoaderButton" text="Charger une configuration"/>
+            <MFXButton fx:id="configSaverButton" text="Sauvegarder la configuration"/>
+            </HBox>
+
+            <Separator/>
+        </VBox>
+    </top>
+    <center>
+        <VBox id="contentNode" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" spacing="10">
+            <Label id="titleLabel" prefHeight="30.0" prefWidth="550.0"
+                   text="Arrêter après" StackPane.alignment="TOP_LEFT">
+            </Label>
+            <Label prefHeight="30.0" prefWidth="550.0" text="Choisissez une condition pour arrêter"
+                   StackPane.alignment="TOP_CENTER">
+            </Label>
+
+            <VBox>
+                <fx:define>
+                    <ToggleGroup fx:id="group" />
+                </fx:define>
+
+                <MFXRadioButton fx:id="radioInfinite" text="Fonctionner indéfiniment" toggleGroup="$group"/>
+                <HBox spacing="10">
+                    <MFXRadioButton fx:id="radioTime" text="Quantité de temps" toggleGroup="$group"/>
+                    <LocalTimeTextField fx:id="timeField"></LocalTimeTextField>
+                </HBox>
+
+                <HBox>
+                    <MFXRadioButton fx:id="radioCycle" text="Nombre de cycles" toggleGroup="$group"/>
+                    <MFXTextField fx:id="numberCycle" textLimit="5" maxWidth="70"/>
+                </HBox>
+
+            </VBox>
+
+            <Separator/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox spacing="10">
+            <MFXButton fx:id="cancel" buttonType="RAISED" text="Annuler"/>
+            <MFXButton fx:id="save" buttonType="RAISED" text="Sauvegarder"/>
+        </HBox>
+    </bottom>
+</MFXDialog>

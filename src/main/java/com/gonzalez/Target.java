@@ -27,9 +27,10 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.StackedFontIcon;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Target extends Stage {
+public class Target extends Stage implements Serializable {
 
     public boolean isDragDetect = false;
     private double xOffset = 0;
