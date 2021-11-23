@@ -1,4 +1,4 @@
-package com.gonzalez;
+package com.gonzalez.views;
 
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
@@ -7,7 +7,10 @@ import io.github.palexdev.materialfx.controls.enums.ButtonType;
 import io.github.palexdev.materialfx.controls.enums.DialogType;
 import io.github.palexdev.materialfx.controls.legacy.MFXLegacyComboBox;
 import io.github.palexdev.materialfx.utils.BindingUtils;
-import javafx.animation.*;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -27,10 +30,9 @@ import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import org.kordamp.ikonli.javafx.StackedFontIcon;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Target extends Stage implements Serializable {
+public class TargetStage extends Stage {
 
     public boolean isDragDetect = false;
     private double xOffset = 0;
@@ -39,13 +41,13 @@ public class Target extends Stage implements Serializable {
     private int number;
     private int timeToWait = 2000;
 
-    Timeline timeline;
-    StackedFontIcon fontIcon;
+    private Timeline timeline;
+    private StackedFontIcon fontIcon;
     private Circle circle;
 
-    MFXStageDialog mfxStageDialog;
+    private MFXStageDialog mfxStageDialog;
 
-    public Target(Stage stage, int number) {
+    public TargetStage(Stage stage, int number) {
         this.number = number;
 
         fontIcon = new StackedFontIcon();
@@ -67,7 +69,7 @@ public class Target extends Stage implements Serializable {
         vBox.setPickOnBounds(true);
 
         Scene scene = new Scene(vBox);
-        scene.getStylesheets().add(getClass().getResource("css/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("../css/style.css").toExternalForm());
         this.setScene(scene);
         this.setAlwaysOnTop(true);
         this.initStyle(StageStyle.TRANSPARENT);
@@ -88,6 +90,10 @@ public class Target extends Stage implements Serializable {
                         new KeyValue(circle.radiusProperty() ,0, Interpolator.EASE_BOTH))
         );
         timeline.setOnFinished(event-> timeline2.play());
+    }
+
+    public int getNumber() {
+        return number;
     }
 
     public int getTimeToWait() {

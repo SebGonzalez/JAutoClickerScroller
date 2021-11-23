@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.image.ImageView?>
 
 <?import javafx.scene.control.Button?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 <VBox xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" styleClass="mainMenu"
-      fx:controller="com.gonzalez.Launcher">
+      fx:controller="com.gonzalez.views.Launcher">
     <Button mnemonicParsing="false"
             prefWidth="40.0"
             fx:id="play">

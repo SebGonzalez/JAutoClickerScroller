@@ -24,3 +24,28 @@
     -fx-background-radius: 0;
     -fx-background-color: transparent;
 }
+
+.mainTitleSettings {
+    -fx-font-size:30px;
+    -fx-padding: 10 10 0 10;
+}
+.submainTitleSettings {
+    -fx-font-size:15px;
+    -fx-padding: 15 0 0 15;
+}
+
+.settingLabel {
+    -fx-font-size:12px;
+    -fx-padding: 10 0 10 15;
+}
+
+.boxSettingChoiceStop {
+    -fx-padding: 0 0 15 25;
+}
+
+.settingButton {
+    -fx-background-color: white;
+    -fx-padding: 10;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 200px;
+}

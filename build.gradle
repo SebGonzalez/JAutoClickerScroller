@@ -29,7 +29,8 @@ dependencies {
 
 }
 
-mainClassName = "com.gonzalez.Launcher"
+mainClassName = "com.gonzalez.views.Launcher"
+compileJava.options.encoding = "UTF-8"
 
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
