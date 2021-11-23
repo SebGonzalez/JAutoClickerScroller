@@ -56,9 +56,9 @@ public class GlobalConfig implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         switch (settings.getAutoClickerType()) {
-            case INFINITE -> radioInfinite.setSelected(true);
-            case TIME -> radioTime.setSelected(true);
-            case CYCLE -> radioCycle.setSelected(true);
+            case INFINITE : radioInfinite.setSelected(true); break;
+            case TIME : radioTime.setSelected(true); break;
+            case CYCLE : radioCycle.setSelected(true); break;
         }
         timeField.setLocalTime(settings.getTime());
         numberCycle.setText("" + settings.getNbCycle());

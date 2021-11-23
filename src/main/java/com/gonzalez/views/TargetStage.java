@@ -167,12 +167,13 @@ public class TargetStage extends Stage {
 
             cancel.setOnAction(event -> mfxStageDialog.close());
             ok.setOnAction(event -> {
-                timeToWait = switch (unit.getSelectionModel().getSelectedItem()) {
+                /*timeToWait = switch (unit.getSelectionModel().getSelectedItem()) {
                     case "milliseconde" -> Integer.parseInt(mfxTextfield.getText());
                     case "seconde" -> Integer.parseInt(mfxTextfield.getText()) * 1000;
                     case "minute" -> Integer.parseInt(mfxTextfield.getText()) * 1000 * 60;
                     default -> 2000;
-                };
+                };*/
+                timeToWait = Integer.parseInt(mfxTextfield.getText());
 
                 mfxStageDialog.close();
             });

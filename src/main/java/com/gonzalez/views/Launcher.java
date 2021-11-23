@@ -154,9 +154,9 @@ public class Launcher extends Application {
             }
 
             switch (globalSettings.getAutoClickerType()) {
-                case INFINITE -> startInfiniteAutoClicker(robot);
-                case TIME -> startTimeAutoClicker(robot);
-                case CYCLE -> startCycleAutoClicker(robot);
+                case INFINITE : startInfiniteAutoClicker(robot); break;
+                case TIME : startTimeAutoClicker(robot); break;
+                case CYCLE : startCycleAutoClicker(robot); break;
             }
 
         });

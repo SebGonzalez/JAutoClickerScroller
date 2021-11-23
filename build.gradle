@@ -11,7 +11,7 @@ repositories {
 }
 
 javafx {
-    version = 17
+    version = 15
     modules = ['javafx.controls', 'javafx.graphics', 'javafx.media', 'javafx.fxml', 'javafx.web', 'javafx.swing']
 }
 
@@ -24,7 +24,7 @@ dependencies {
     implementation group: 'org.kordamp.ikonli', name: 'ikonli-javafx', version: '12.2.0'
     implementation group: 'org.kordamp.ikonli', name: 'ikonli-fontawesome5-pack', version: '12.2.0'
     implementation group: 'io.github.palexdev', name: 'materialfx', version: '11.12.0'
-    implementation group: 'org.jfxtras', name: 'jfxtras-controls', version: '15-r2'
+    implementation group: 'org.jfxtras', name: 'jfxtras-controls', version: '11-r2'
 
 
 }
@@ -35,23 +35,40 @@ compileJava.options.encoding = "UTF-8"
 runtime {
     options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
 
-    targetPlatform("win", "$rootDir/jdk/jdk-17")
+    //targetPlatform("win", "$rootDir/jdk/jdk-17")
+    /*targetPlatform("lin") {
+        jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_linux_hotspot_15.0.2_7.tar.gz")
+    }
+    targetPlatform("mac") {
+         jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_mac_hotspot_15.0.2_7.tar.gz") {
+             downloadDir = "$buildDir/myMac"
+             archiveName = "my-mac-jdk"
+             archiveExtension = "tar.gz"
+             pathToHome = "jdk-15.0.2+7/Contents/Home"
+             overwrite = true
+        }
+    }
+    targetPlatform("win") {
+      jdkHome = jdkDownload("https://github.com/AdoptOpenJDK/openjdk15-binaries/releases/download/jdk-15.0.2%2B7/OpenJDK15U-jdk_x64_windows_hotspot_15.0.2_7.zip")
+    }*/
 
     jpackage {
-        skipInstaller = true
-        targetPlatformName = "win"
-        jpackageHome = "$rootDir/jdk/jdk-17"
-        def imgType = targetPlatformName == "win" ? 'ico' : targetPlatformName == "mac" ? 'icns' : 'png'
-        imageOptions  = ['--icon', "$rootDir\\ico.ico"]
+        def currentOs = org.gradle.internal.os.OperatingSystem.current()
+        //targetPlatformName = "win"
+        def imgType = currentOs.windows ? 'ico' : currentOs.macOsX ? 'icns' : 'png'
+        imageOptions += ['--icon', "src/main/resources/ico.$imgType"]
         installerOptions += ['--resource-dir', "src/main/resources"]
 
-        if(targetPlatformName == "win") {
+        //jpackageHome = "$rootDir/jdk/jdk-17"
+
+
+        if(currentOs.windows) {
             installerOptions += [/*'--win-per-user-install',*/ '--win-dir-chooser', '--win-menu', '--win-shortcut']
         }
-        else if (targetPlatformName == "lin") {
+        else if (currentOs.linux) {
             installerOptions += ['--linux-package-name', 'hellofx','--linux-shortcut']
         }
-        else if (targetPlatformName == "mac") {
+        else if (currentOs.macOsX) {
             installerOptions += ['--mac-package-name', 'hellofx']
         }
     }
