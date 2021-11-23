@@ -1,5 +1,6 @@
 package com.gonzalez.views;
 
+import com.gonzalez.Launcher;
 import com.gonzalez.Settings;
 import com.gonzalez.serialize.Configuration;
 import com.gonzalez.serialize.Target;
@@ -116,7 +117,7 @@ public class GlobalConfig implements Initializable {
             cancel.setOnAction(event2 -> nameChooserDialog.close());
             ok.setOnAction(event2 -> {
                 Configuration configuration = new Configuration(mfxTextfield.getText());
-                for(TargetStage targetStage : Launcher.listTarget) {
+                for(TargetStage targetStage : MainView.listTarget) {
                     configuration.addTarget(new Target(targetStage.getNumber(), targetStage.getX(), targetStage.getY()));
                 }
                 configuration.setName(mfxTextfield.getText());
@@ -141,13 +142,13 @@ public class GlobalConfig implements Initializable {
         });
 
         configLoaderButton.setOnMousePressed(event -> {
-            for(TargetStage target : Launcher.listTarget) {
+            for(TargetStage target : MainView.listTarget) {
                 target.close();
             }
-            Launcher.listTarget.clear();
+            MainView.listTarget.clear();
 
             MFXStageDialog configChooserDialog = new MFXStageDialog(DialogType.GENERIC, "Chargement de votre configuration", "");
-            configChooserDialog.getDialog().getStylesheets().add(getClass().getResource("../css/style.css").toExternalForm());
+            configChooserDialog.getDialog().getStylesheets().add(Launcher.class.getResource("css/style.css").toExternalForm());
             configChooserDialog.setOwner(mfxStageDialog.getDialog().getScene().getWindow());
 
             ListView<String> configurationListView = new ListView<>();
@@ -166,10 +167,10 @@ public class GlobalConfig implements Initializable {
                 settings.setCurrentConfigurationName(configurationListView.getSelectionModel().getSelectedItem());
                 Configuration configuration = settings.getConfigurationList().getConfigurationByName(configurationListView.getSelectionModel().getSelectedItem());
                 for(Target target : configuration.getTargetList()) {
-                    TargetStage targetStage = new TargetStage(Launcher.stage, target.getNumber());
+                    TargetStage targetStage = new TargetStage(MainView.stage, target.getNumber());
                     targetStage.setX(target.getX());
                     targetStage.setY(target.getY());
-                    Launcher.listTarget.add(targetStage);
+                    MainView.listTarget.add(targetStage);
                 }
 
                 configChooserDialog.close();

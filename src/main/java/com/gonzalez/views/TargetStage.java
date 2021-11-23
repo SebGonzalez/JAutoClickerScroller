@@ -1,5 +1,6 @@
 package com.gonzalez.views;
 
+import com.gonzalez.Launcher;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -69,7 +70,7 @@ public class TargetStage extends Stage {
         vBox.setPickOnBounds(true);
 
         Scene scene = new Scene(vBox);
-        scene.getStylesheets().add(getClass().getResource("../css/style.css").toExternalForm());
+        scene.getStylesheets().add(Launcher.class.getResource("css/style.css").toExternalForm());
         this.setScene(scene);
         this.setAlwaysOnTop(true);
         this.initStyle(StageStyle.TRANSPARENT);

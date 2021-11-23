@@ -1,5 +1,6 @@
 package com.gonzalez.views;
 
+import com.gonzalez.Launcher;
 import com.gonzalez.Settings;
 import io.github.palexdev.materialfx.controls.MFXDialog;
 import io.github.palexdev.materialfx.controls.MFXStageDialog;
@@ -27,7 +28,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Launcher extends Application {
+public class MainView extends Application {
 
     private Settings globalSettings = new Settings();
 
@@ -47,14 +48,10 @@ public class Launcher extends Application {
     public static List<TargetStage> listTarget = new ArrayList<>();
     private boolean startAutoCliker = false;
 
-    public static void main(String[] args) {
-        Application.launch(Launcher.class, args);
-    }
-
     @Override
     public void start(Stage stage) {
-        Launcher.stage = stage;
-        FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("home.fxml"));
+        MainView.stage = stage;
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("home.fxml"));
 
         Parent root = null;
         try {
@@ -64,17 +61,16 @@ public class Launcher extends Application {
         }
 
         scene = new Scene(root);
-        scene.getStylesheets().add(getClass().getResource("../css/style.css").toExternalForm());
+        scene.getStylesheets().add(Launcher.class.getResource("css/style.css").toExternalForm());
 
-        //scene.setFill(new Color(0.22,0.22,0.22,0.5));
         stage.setScene(scene);
         stage.setAlwaysOnTop(true);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
 
 
-        ((Launcher) loader.getController()).addTarget(listTarget.size() + 1);
-        ((Launcher) loader.getController()).addListener();
+        ((MainView) loader.getController()).addTarget(listTarget.size() + 1);
+        ((MainView) loader.getController()).addListener();
     }
 
     @FXML
@@ -119,7 +115,7 @@ public class Launcher extends Application {
 
         GlobalConfig globalConfig = new GlobalConfig(globalSettings);
         try {
-            FXMLLoader loader = new FXMLLoader(Launcher.class.getResource("SettingDialog.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainView.class.getResource("SettingDialog.fxml"));
             loader.setControllerFactory(controller -> globalConfig);
             infoDialog = loader.load();
         } catch (IOException e) {
